@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loopwork — Software that feels like magic to use</title>
+<meta name="description" content="Loopwork designs, builds, and supports websites and apps for small and growing businesses — in plain language, without the six-month wait.">
+
+<!-- Favicon: a tiny version of the mascot, no file to host -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2312A594'/%3E%3Ccircle cx='24' cy='30' r='4.5' fill='%23fff'/%3E%3Ccircle cx='40' cy='30' r='4.5' fill='%23fff'/%3E%3Cpath d='M22 40 Q32 48 42 40' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   LOOPWORK — single-file template
+   -------------------------------------------------------------------
+   HOW TO CUSTOMIZE
+   • Colors, fonts, spacing: edit the CSS variables in :root below.
+   • Text and links: search this file for the section comment banners,
+     e.g. <!-- ===== HERO ===== -->, and edit the HTML in place.
+   • Everything (styles + behavior) lives in this one file on purpose —
+     copy it anywhere and it works, no build step, no other files.
+   ===================================================================== */
+
+  :root {
+    /* Color — change these six and the whole site follows */
+    --paper: #FFFFFF;
+    --cream: #FFFBF2;
+    --ink: #23262B;
+    --text-muted: #63666C;
+    --line: #EFEAE0;
+
+    --coral: #FF6F61;      /* decorative + buttons (paired with ink text) */
+    --teal: #12A594;       /* decorative + badges (paired with ink text) */
+    --teal-strong: #0C7A6F;/* links, secondary buttons, CTA background */
+    --teal-deep: #0B3B3A;  /* footer background */
+    --yellow: #FFC145;     /* decorative accent, sparing use */
+
+    /* Type */
+    --font-display: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+    /* Layout */
+    --container: 1180px;
+    --container-narrow: 720px;
+    --gutter: clamp(20px, 5vw, 48px);
+    --section-py: clamp(56px, 8vw, 104px);
+    --r-lg: 28px;
+    --r-md: 18px;
+  }
+
+  * , *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  ul, ol { margin: 0; padding: 0; list-style: none; }
+  button { font-family: inherit; cursor: pointer; }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display); font-weight: 800; line-height: 1.12;
+    margin: 0 0 0.5em; letter-spacing: -0.01em;
+  }
+  p { margin: 0 0 1em; color: var(--text-muted); }
+
+  h1 { font-size: clamp(2.4rem, 4.8vw, 3.75rem); }
+  h2 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); }
+  h3 { font-size: 1.3rem; }
+
+  .skip-link {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--ink); color: #fff;
+    padding: 12px 18px; z-index: 200; border-radius: 0 0 10px 0;
+  }
+  .skip-link:focus { left: 0; }
+  :focus-visible { outline: 3px solid var(--teal-strong); outline-offset: 3px; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+  .wrap--narrow { max-width: var(--container-narrow); }
+  .section { padding-block: var(--section-py); }
+  .section--cream { background: var(--cream); }
+  .section-head { max-width: 620px; margin: 0 auto clamp(36px, 5vw, 60px); text-align: center; }
+  .section-head p { font-size: 1.08rem; margin: 0; }
+  .eyebrow-pill {
+    display: inline-block; background: var(--yellow); color: var(--ink);
+    font-weight: 700; font-size: 0.85rem; padding: 6px 16px; border-radius: 999px;
+    margin-bottom: 16px;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 15px 28px; border-radius: 999px;
+    font-family: var(--font-display); font-weight: 700; font-size: 0.98rem;
+    border: 2px solid transparent;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn--primary { background: var(--coral); color: var(--ink); box-shadow: 0 10px 24px -10px rgba(255,111,97,0.65); }
+  .btn--primary:hover { background: #FF816F; }
+  .btn--outline { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn--outline:hover { background: var(--ink); color: #fff; }
+  .btn--white { background: #fff; color: var(--teal-strong); }
+  .btn--white:hover { background: #EFFFFC; }
+  .btn--ghost-light { background: transparent; color: #fff; border-color: rgba(255,255,255,0.55); }
+  .btn--ghost-light:hover { background: rgba(255,255,255,0.12); }
+  .btn--small { padding: 11px 20px; font-size: 0.88rem; }
+
+  .text-link { color: var(--teal-strong); font-weight: 700; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  input[type="email"] {
+    font-family: inherit; font-size: 0.95rem; padding: 13px 16px;
+    border: 2px solid var(--line); border-radius: 999px;
+    background: #fff; color: var(--ink); flex: 1; min-width: 0;
+  }
+  input[type="email"]::placeholder { color: var(--text-muted); }
+
+  /* ---------- header ---------- */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(8px);
+    border-bottom: 1px solid transparent; transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .site-header.is-scrolled { border-bottom-color: var(--line); box-shadow: 0 2px 16px -8px rgba(35,38,43,0.12); }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; padding-block: 14px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; }
+  .site-nav { display: flex; align-items: center; gap: 28px; }
+  .site-nav a:not(.btn) { font-size: 0.96rem; font-weight: 600; }
+  .site-nav a:not(.btn):hover { color: var(--teal-strong); }
+  .nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 40px; background: none; border: none; padding: 0; }
+  .nav-toggle span { display: block; width: 22px; height: 2.5px; border-radius: 2px; background: var(--ink); transition: transform .2s ease, opacity .2s ease; }
+
+  /* ---------- hero ---------- */
+  .hero { padding-block: clamp(48px, 7vw, 84px) clamp(40px, 6vw, 72px); overflow: hidden; }
+  .hero-inner { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 5vw, 60px); align-items: center; }
+  .hero h1 { max-width: 15ch; }
+  .hero-sub { font-size: 1.15rem; max-width: 44ch; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin: 26px 0 34px; }
+
+  .hero-trust { font-size: 0.92rem; color: var(--text-muted); }
+  .hero-trust strong { color: var(--ink); }
+  .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .hero-chips span {
+    font-size: 0.82rem; font-weight: 600; color: var(--ink);
+    background: var(--cream); border: 1px solid var(--line);
+    padding: 6px 13px; border-radius: 999px;
+  }
+
+  .hero-art { max-width: 440px; margin-inline: auto; }
+  .mascot-float { animation: float 3.6s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+  .stat-row { display: flex; gap: clamp(20px, 4vw, 40px); margin-top: 40px; flex-wrap: wrap; }
+  .stat-row div { min-width: 120px; }
+  .stat-num { font-family: var(--font-display); font-weight: 800; font-size: 1.7rem; color: var(--teal-strong); margin: 0; }
+  .stat-label { font-size: 0.85rem; color: var(--text-muted); margin: 2px 0 0; }
+
+  /* ---------- services ---------- */
+  .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 28px); }
+  .service-card {
+    background: #fff; border-radius: var(--r-lg); padding: clamp(28px, 3vw, 34px);
+    border: 1px solid var(--line);
+  }
+  .service-card--coral { box-shadow: 0 24px 48px -30px rgba(255,111,97,0.55); }
+  .service-card--teal { box-shadow: 0 24px 48px -30px rgba(18,165,148,0.5); }
+  .service-card--yellow { box-shadow: 0 24px 48px -30px rgba(255,193,69,0.55); }
+
+  .icon-badge {
+    width: 56px; height: 56px; border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .icon-badge--coral { background: var(--coral); }
+  .icon-badge--teal { background: var(--teal); }
+  .icon-badge--yellow { background: var(--yellow); }
+
+  .service-card h3 { margin-bottom: 10px; }
+  .service-card p { margin: 0; font-size: 0.98rem; }
+
+  /* ---------- how it works ---------- */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(20px, 3vw, 26px); position: relative; }
+  .steps::before {
+    content: ""; position: absolute; top: 27px; left: 8%; right: 8%; height: 2px;
+    background: repeating-linear-gradient(to right, var(--line) 0 10px, transparent 10px 18px);
+    z-index: 0;
+  }
+  .step { position: relative; z-index: 1; text-align: center; }
+  .step-num {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: var(--ink);
+    margin: 0 auto 18px; border: 3px solid var(--paper);
+  }
+  .step:nth-child(1) .step-num { background: var(--coral); }
+  .step:nth-child(2) .step-num { background: var(--yellow); }
+  .step:nth-child(3) .step-num { background: var(--teal); }
+  .step:nth-child(4) .step-num { background: var(--coral); }
+  .step h3 { font-size: 1.1rem; margin-bottom: 8px; }
+  .step p { font-size: 0.93rem; max-width: 26ch; margin-inline: auto; }
+
+  /* ---------- work ---------- */
+  .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 28px); }
+  .work-card { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+  .work-shot {
+    height: 150px; display: flex; align-items: center; justify-content: center;
+  }
+  .work-body { padding: 24px; }
+  .work-tag {
+    display: inline-block; font-size: 0.78rem; font-weight: 700; color: var(--ink);
+    background: var(--cream); border-radius: 999px; padding: 4px 12px; margin-bottom: 12px;
+  }
+  .work-card h3 { margin-bottom: 6px; }
+  .work-card p { font-size: 0.95rem; margin-bottom: 14px; }
+  .work-result {
+    font-size: 0.88rem; font-weight: 700; color: var(--teal-strong); margin: 0;
+    padding-top: 14px; border-top: 1px dashed var(--line);
+  }
+
+  /* ---------- testimonials ---------- */
+  .quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 28px); }
+  .quote-card { background: var(--cream); border-radius: var(--r-lg); padding: 28px; }
+  .quote-card blockquote { margin: 0 0 20px; font-size: 1.02rem; color: var(--ink); line-height: 1.55; }
+  .quote-person { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; color: var(--ink);
+    flex: none;
+  }
+  .quote-name { font-weight: 700; font-size: 0.92rem; display: block; }
+  .quote-role { font-size: 0.85rem; color: var(--text-muted); }
+
+  /* ---------- FAQ ---------- */
+  .faq-list { border-top: 1px solid var(--line); }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-question {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    padding-block: 22px; background: none; border: none;
+    font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--ink); text-align: left;
+  }
+  .faq-chevron { flex: none; transition: transform .2s ease; color: var(--teal-strong); }
+  .faq-question[aria-expanded="true"] .faq-chevron { transform: rotate(180deg); }
+  .faq-answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
+  .faq-answer > p { overflow: hidden; margin: 0 0 22px; max-width: 62ch; font-size: 0.98rem; }
+  .faq-answer.is-open { grid-template-rows: 1fr; }
+
+  /* ---------- CTA ---------- */
+  .cta-wave { display: block; margin-bottom: -2px; }
+  .cta-final { background: var(--teal-strong); padding-block: clamp(52px, 7vw, 88px); text-align: center; }
+  .cta-final h2 { color: #fff; margin-bottom: 10px; }
+  .cta-final p { color: rgba(255,255,255,0.8); margin: 0 auto 32px; max-width: 44ch; }
+  .cta-final-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+  /* ---------- footer ---------- */
+  .site-footer { background: var(--teal-deep); color: rgba(255,255,255,0.72); }
+  .footer-top {
+    display: grid; grid-template-columns: 1.5fr 0.8fr 0.8fr 1fr; gap: 40px;
+    padding-block: clamp(44px, 6vw, 64px) 44px;
+  }
+  .footer-brand .logo { color: #fff; margin-bottom: 12px; }
+  .footer-brand p { color: rgba(255,255,255,0.55); font-size: 0.92rem; margin-bottom: 20px; max-width: 32ch; }
+  .newsletter label { display: block; font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-bottom: 10px; }
+  .newsletter-row { display: flex; gap: 8px; }
+  .newsletter input[type="email"] { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff; }
+  .newsletter-status { font-size: 0.82rem; margin: 10px 0 0; min-height: 1em; color: var(--yellow); }
+
+  .footer-col h4 { color: #fff; font-size: 0.92rem; margin-bottom: 16px; }
+  .footer-col a, .footer-col p { display: block; font-size: 0.92rem; margin-bottom: 12px; color: rgba(255,255,255,0.65); }
+  .footer-col a:hover { color: #fff; }
+  .footer-locations { color: rgba(255,255,255,0.45); font-size: 0.85rem; }
+
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    padding-block: 22px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 0.85rem;
+  }
+  .footer-bottom p { margin: 0; color: rgba(255,255,255,0.5); }
+  .footer-social { display: flex; gap: 12px; }
+  .footer-social a {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.75);
+  }
+  .footer-social a:hover { border-color: #fff; color: #fff; }
+  .footer-legal { display: flex; gap: 18px; }
+  .footer-legal a { color: rgba(255,255,255,0.5); }
+  .footer-legal a:hover { color: #fff; }
+
+  /* ---------- reveal-on-load (hero only — the single motion moment) ---------- */
+  .reveal { opacity: 0; animation: reveal-up .6s ease forwards; animation-delay: calc(var(--d, 0) * .09s); }
+  @keyframes reveal-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { animation: none; opacity: 1; }
+    .mascot-float { animation: none; }
+    .btn { transition: none; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1024px) {
+    .service-grid { grid-template-columns: repeat(3, 1fr); }
+    .work-grid { grid-template-columns: repeat(3, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 860px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-art { order: -1; max-width: 300px; }
+    .service-grid, .work-grid, .quote-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; row-gap: 34px; }
+    .steps::before { display: none; }
+  }
+  @media (max-width: 720px) {
+    .nav-toggle { display: flex; }
+    .site-nav {
+      position: fixed; inset: 66px 0 auto 0; background: #fff;
+      flex-direction: column; align-items: flex-start; gap: 4px;
+      padding: 12px var(--gutter) 24px; border-bottom: 1px solid var(--line);
+      transform: translateY(-8px); opacity: 0; visibility: hidden;
+      transition: opacity .18s ease, transform .18s ease, visibility .18s;
+    }
+    .site-nav a:not(.btn) { padding-block: 10px; width: 100%; }
+    .site-nav.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .site-nav .btn { margin-top: 8px; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .service-grid, .work-grid, .quote-grid, .steps { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    .stat-row { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header" id="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="#top" aria-label="Loopwork home">
+      <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="18" fill="var(--teal)"/>
+        <circle cx="24" cy="30" r="4.5" fill="#fff"/>
+        <circle cx="40" cy="30" r="4.5" fill="#fff"/>
+        <path d="M22 40 Q32 48 42 40" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span>Loopwork</span>
+    </a>
+    <nav class="site-nav" id="site-nav">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn--primary btn--small" href="#contact">Let's chat</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="top">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <h1 class="reveal" style="--d:0">Software that feels like magic to use.</h1>
+        <p class="hero-sub reveal" style="--d:1">Loopwork designs, builds, and launches websites and apps for small and growing businesses — in plain language, and without the six-month wait.</p>
+        <div class="hero-actions reveal" style="--d:2">
+          <a class="btn btn--primary" href="#contact">Start your project</a>
+          <a class="btn btn--outline" href="#work">See our work</a>
+        </div>
+
+        <div class="reveal" style="--d:3">
+          <p class="hero-trust"><strong>Loved by 200+ small businesses</strong> — a few of our favorites:</p>
+          <div class="hero-chips">
+            <span>Marigold Market</span>
+            <span>Petal Studio</span>
+            <span>Nimbus Coffee</span>
+            <span>Here &amp; There Travel</span>
+            <span>Sunday Supply</span>
+          </div>
+        </div>
+
+        <div class="stat-row reveal" style="--d:4">
+          <div><p class="stat-num">200+</p><p class="stat-label">Happy clients</p></div>
+          <div><p class="stat-num">6–10 wks</p><p class="stat-label">Average launch time</p></div>
+          <div><p class="stat-num">4.9/5</p><p class="stat-label">Average client rating</p></div>
+        </div>
+      </div>
+
+      <div class="hero-art reveal" style="--d:1" aria-hidden="true">
+        <svg viewBox="0 0 440 440" width="100%">
+          <path d="M220,40 C300,40 385,95 405,175 C425,255 385,335 305,385 C225,435 120,415 70,340 C20,265 30,165 95,105 C135,68 170,40 220,40 Z" fill="var(--yellow)" opacity="0.22"/>
+          <g class="mascot-float">
+            <circle cx="362" cy="92" r="26" fill="var(--coral)"/>
+            <circle cx="72" cy="342" r="22" fill="none" stroke="var(--yellow)" stroke-width="10"/>
+            <circle cx="340" cy="378" r="13" fill="var(--teal-strong)"/>
+            <rect x="140" y="140" width="160" height="160" rx="46" fill="var(--teal)"/>
+            <circle cx="185" cy="205" r="10" fill="#fff"/>
+            <circle cx="255" cy="205" r="10" fill="#fff"/>
+            <circle cx="185" cy="205" r="4" fill="var(--ink)"/>
+            <circle cx="255" cy="205" r="4" fill="var(--ink)"/>
+            <path d="M180 250 Q220 282 260 250" stroke="var(--ink)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-pill">What we do</span>
+        <h2>Three ways we can help</h2>
+        <p>Most projects start in one of these three places — and often grow into all three.</p>
+      </div>
+
+      <div class="service-grid">
+        <div class="service-card service-card--teal">
+          <span class="icon-badge icon-badge--teal" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="6" width="24" height="17" rx="3"/>
+              <path d="M11 27 H21"/>
+              <circle cx="13" cy="14" r="1.6" fill="var(--ink)" stroke="none"/>
+              <circle cx="19" cy="14" r="1.6" fill="var(--ink)" stroke="none"/>
+              <path d="M12.5 18 Q16 20.5 19.5 18"/>
+            </svg>
+          </span>
+          <h3>Websites &amp; apps</h3>
+          <p>Beautiful, easy-to-use websites and apps, designed around your customers instead of our convenience. Fast to load, simple to update, built to grow with you.</p>
+        </div>
+
+        <div class="service-card service-card--coral">
+          <span class="icon-badge icon-badge--coral" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 26 L20 12 L24 16 L10 30 Z"/>
+              <path d="M20 12 L24 8 L27 11 L24 16"/>
+              <path d="M6 26 L4 30 L8 28 Z"/>
+              <path d="M26 6 L27.4 8.6 L30 10 L27.4 11.4 L26 14 L24.6 11.4 L22 10 L24.6 8.6 Z" fill="var(--ink)" stroke="none"/>
+            </svg>
+          </span>
+          <h3>Product design</h3>
+          <p>We sketch, prototype, and test ideas with real people before a single line of code gets written — so what we build actually gets used.</p>
+        </div>
+
+        <div class="service-card service-card--yellow">
+          <span class="icon-badge icon-badge--yellow" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 8 H27 A2 2 0 0 1 29 10 V21 A2 2 0 0 1 27 23 H14 L8 28 V23 H5 A2 2 0 0 1 3 21 V10 A2 2 0 0 1 5 8 Z"/>
+              <path d="M16 12.8 C14.7 11.2 12.2 11.6 12.2 13.8 C12.2 15.8 16 18.2 16 18.2 C16 18.2 19.8 15.8 19.8 13.8 C19.8 11.6 17.3 11.2 16 12.8 Z" fill="var(--ink)" stroke="none"/>
+            </svg>
+          </span>
+          <h3>Ongoing support</h3>
+          <p>Launch day is just the beginning. We stick around to fix, improve, and grow what we built together — so you're never stuck waiting on a stranger.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="section section--cream" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-pill">How it works</span>
+        <h2>Four simple steps</h2>
+        <p>No jargon, no surprise invoices — just a clear path from idea to launch.</p>
+      </div>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num">1</span>
+          <h3>Chat</h3>
+          <p>Tell us what you're trying to do, in plain language. No forms, just a conversation.</p>
+        </li>
+        <li class="step">
+          <span class="step-num">2</span>
+          <h3>Sketch</h3>
+          <p>We turn that conversation into a simple design you can react to, before any code is written.</p>
+        </li>
+        <li class="step">
+          <span class="step-num">3</span>
+          <h3>Build</h3>
+          <p>Our team builds it in small pieces, so you see progress every step of the way.</p>
+        </li>
+        <li class="step">
+          <span class="step-num">4</span>
+          <h3>Launch</h3>
+          <p>We launch together, then stick around to help with whatever comes next.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== WORK ===== -->
+  <section class="section" id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-pill">Recent work</span>
+        <h2>A few things we've built</h2>
+        <p>Small businesses, real problems, software that actually gets used.</p>
+      </div>
+
+      <div class="work-grid">
+        <article class="work-card">
+          <div class="work-shot" style="background:var(--cream);">
+            <svg viewBox="0 0 200 90" width="70%" aria-hidden="true">
+              <rect x="55" y="15" width="90" height="60" rx="10" fill="none" stroke="var(--coral)" stroke-width="2.4"/>
+              <path d="M70 55 L85 40 L100 58 L120 32 L135 50" fill="none" stroke="var(--coral)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <span class="work-tag">Online ordering</span>
+            <h3>Marigold Market</h3>
+            <p>An online ordering site for a neighborhood farmers market, built in six weeks.</p>
+            <p class="work-result">3× more online orders in the first season</p>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-shot" style="background:var(--cream);">
+            <svg viewBox="0 0 200 90" width="70%" aria-hidden="true">
+              <rect x="60" y="12" width="80" height="66" rx="10" fill="none" stroke="var(--teal-strong)" stroke-width="2.4"/>
+              <path d="M75 32 H125 M75 44 H125 M75 56 H105" stroke="var(--teal-strong)" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="M108 58 L116 66 L132 46" fill="none" stroke="var(--teal-strong)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <span class="work-tag">Booking app</span>
+            <h3>Petal Studio</h3>
+            <p>A simple booking app for a flower studio's classes and events.</p>
+            <p class="work-result">Booking phone calls dropped by 80%</p>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-shot" style="background:var(--cream);">
+            <svg viewBox="0 0 200 90" width="70%" aria-hidden="true">
+              <circle cx="100" cy="45" r="30" fill="none" stroke="var(--yellow)" stroke-width="8"/>
+              <path d="M100 45 L100 25" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+              <path d="M100 45 L114 53" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="work-body">
+            <span class="work-tag">Loyalty app</span>
+            <h3>Nimbus Coffee</h3>
+            <p>A loyalty app three coffee shops now use to keep regulars coming back.</p>
+            <p class="work-result">1,200+ regulars signed up in month one</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="section section--cream">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-pill">Kind words</span>
+        <h2>What clients say after we launch</h2>
+      </div>
+
+      <div class="quote-grid">
+        <figure class="quote-card">
+          <blockquote>I'm not techy at all, and the Loopwork team never once made me feel silly for asking questions.</blockquote>
+          <figcaption class="quote-person">
+            <span class="avatar" style="background:var(--coral);">ER</span>
+            <span>
+              <span class="quote-name">Elena Ruiz</span>
+              <span class="quote-role">Owner, Marigold Market</span>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="quote-card">
+          <blockquote>They actually listened. What we ended up with was simpler than what we asked for — and so much better.</blockquote>
+          <figcaption class="quote-person">
+            <span class="avatar" style="background:var(--yellow);">OC</span>
+            <span>
+              <span class="quote-name">Owen Cole</span>
+              <span class="quote-role">Founder, Petal Studio</span>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="quote-card">
+          <blockquote>Every time something needed fixing, someone answered. That's rare.</blockquote>
+          <figcaption class="quote-person">
+            <span class="avatar" style="background:var(--teal);">PN</span>
+            <span>
+              <span class="quote-name">Priya Nair</span>
+              <span class="quote-role">Nimbus Coffee</span>
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section" id="faq">
+    <div class="wrap wrap--narrow">
+      <div class="section-head">
+        <span class="eyebrow-pill">Questions</span>
+        <h2>Things people usually ask</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>How much does a project cost?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6 L8 11 L13 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer"><p>It depends on what you need, but most projects start around a few thousand dollars. We'll always give you a clear number before any work begins — no surprise invoices, ever.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>How long will it take?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6 L8 11 L13 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer"><p>Most websites and simple apps launch in 6–10 weeks. We'll give you a realistic timeline before we start, and keep you posted the whole way through.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>I'm not techy — can you still help me?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6 L8 11 L13 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer"><p>Absolutely — most of our clients aren't developers, and that's exactly who we build for. We explain things in plain language, always, and there's no such thing as a silly question.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>What happens after launch?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6 L8 11 L13 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer"><p>We don't disappear. Most clients keep us on for small updates and support, billed simply, month to month — cancel any time.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Do you work with small businesses?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6 L8 11 L13 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer"><p>Small businesses are who we love working with most. You don't need a huge budget or a technical team to get started — just an idea worth building.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <svg class="cta-wave" viewBox="0 0 1200 60" preserveAspectRatio="none" width="100%" height="48" aria-hidden="true">
+    <path d="M0,30 C200,60 400,0 600,30 C800,60 1000,0 1200,30 L1200,60 L0,60 Z" fill="var(--teal-strong)"/>
+  </svg>
+  <section class="cta-final" id="contact">
+    <div class="wrap">
+      <h2>Got an idea? Let's chat.</h2>
+      <p>No pressure, no sales pitch — just a friendly 20-minute call to see if we're a good fit.</p>
+      <div class="cta-final-actions">
+        <a class="btn btn--white" href="mailto:hello@loopwork.example?subject=Project%20inquiry">Book a free call</a>
+        <a class="btn btn--ghost-light" href="mailto:hello@loopwork.example">Send us an email</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="wrap footer-top">
+    <div class="footer-brand">
+      <a class="logo" href="#top" aria-label="Loopwork home">
+        <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="18" fill="var(--teal)"/>
+          <circle cx="24" cy="30" r="4.5" fill="#fff"/>
+          <circle cx="40" cy="30" r="4.5" fill="#fff"/>
+          <path d="M22 40 Q32 48 42 40" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>Loopwork</span>
+      </a>
+      <p>A friendly software studio for small and growing businesses.</p>
+      <form class="newsletter" id="newsletterForm">
+        <label for="newsletterEmail">Get occasional good ideas, no spam</label>
+        <div class="newsletter-row">
+          <input type="email" id="newsletterEmail" name="email" placeholder="you@company.com" required>
+          <button type="submit" class="btn btn--white btn--small">Join</button>
+        </div>
+        <p class="newsletter-status" id="newsletterStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <nav class="footer-col" aria-label="Company">
+      <h4>Company</h4>
+      <a href="#top">About</a>
+      <a href="#work">Work</a>
+      <a href="#top">Careers</a>
+    </nav>
+
+    <nav class="footer-col" aria-label="Explore">
+      <h4>Explore</h4>
+      <a href="#services">Services</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+    <nav class="footer-col" aria-label="Contact">
+      <h4>Contact</h4>
+      <a href="mailto:hello@loopwork.example">hello@loopwork.example</a>
+      <a href="tel:+10000000000">+1 (000) 000-0000</a>
+      <p class="footer-locations">Working with clients everywhere</p>
+    </nav>
+  </div>
+
+  <div class="wrap footer-bottom">
+    <p>© <span id="year"></span> Loopwork. All rights reserved.</p>
+    <div class="footer-social">
+      <a href="#" aria-label="Loopwork on Instagram">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+      </a>
+      <a href="#" aria-label="Loopwork on LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="9" fill="currentColor" stroke="none" font-family="Plus Jakarta Sans, sans-serif">in</text></svg>
+      </a>
+      <a href="mailto:hello@loopwork.example" aria-label="Email Loopwork">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M4 7 L12 13 L20 7"/></svg>
+      </a>
+    </div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* 1. Mobile nav toggle */
+  var navToggle = document.getElementById('navToggle');
+  var siteNav = document.getElementById('site-nav');
+  if (navToggle && siteNav) {
+    navToggle.addEventListener('click', function () {
+      var isOpen = siteNav.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    siteNav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        siteNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  /* 2. Header shadow once scrolled */
+  var header = document.getElementById('site-header');
+  if (header) {
+    var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  /* 3. FAQ accordion — one open at a time */
+  var faqButtons = document.querySelectorAll('.faq-question');
+  faqButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      var answer = btn.nextElementSibling;
+      faqButtons.forEach(function (other) {
+        if (other !== btn) {
+          other.setAttribute('aria-expanded', 'false');
+          other.nextElementSibling.classList.remove('is-open');
+        }
+      });
+      btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      answer.classList.toggle('is-open', !expanded);
+    });
+  });
+
+  /* 4. Newsletter — demo only; replace with a real request to your email provider */
+  var newsletterForm = document.getElementById('newsletterForm');
+  var newsletterStatus = document.getElementById('newsletterStatus');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      newsletterStatus.textContent = 'Thanks — you\u2019re on the list.';
+      newsletterForm.reset();
+    });
+  }
+
+  /* 5. Footer year */
+  var yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+});
+</script>
+</body>
+</html>
